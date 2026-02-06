@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Pharmacy_Management_System.Repo</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pharmacy-Management-System.Application\Pharmacy-Management-System.Application.csproj" />
+    <ProjectReference Include="..\Pharmacy-Management-System.Data\Pharmacy-Management-System.Data.csproj" />
+    <ProjectReference Include="..\Pharmacy-Management-System.Domain\Pharmacy-Management-System.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
