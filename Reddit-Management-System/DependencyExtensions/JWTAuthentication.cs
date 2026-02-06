@@ -1,0 +1,35 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Reddit_Management_System.Application.AppSettings;
+using System.Text;
+
+namespace Reddit_Management_System.DependencyExtensions
+{
+    public static class JWTAuthentication
+    {
+        public static void AddJWTAuthentication(this WebApplicationBuilder builder)
+        {
+            var jwtSettings = new JWTSettings();
+
+            builder.Configuration.Bind("JwtSettings", jwtSettings);
+            builder.Services.AddSingleton(jwtSettings);
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.SaveToken = true;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = jwtSettings.Issuer,
+                            ValidAudience = jwtSettings.Audience,
+                            RequireExpirationTime = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+                        };
+                    });
+        }
+    }
+}

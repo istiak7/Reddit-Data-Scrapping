@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Reddit_Management_System.Repo</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Reddit-Management-System.Application\Reddit-Management-System.Application.csproj" />
+    <ProjectReference Include="..\Reddit-Management-System.Data\Reddit-Management-System.Data.csproj" />
+    <ProjectReference Include="..\Reddit-Management-System.Domain\Reddit-Management-System.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
