@@ -9,7 +9,9 @@ namespace Reddit_Management_System.Application.ServiceInterfaces.Email
 {
     public interface IEmailCommandService
     {
-        Task<Result> SendOtpEmailAsync(string email, string otp);
-        Task<Result> OtpVerificationAsync(VerifyOtpRequestDto request);
+        Task<Result> SendOtpEmailAsync(string email,List<SrapResponseDto> Message);
     }
+    
 }
+
+

@@ -11,6 +11,8 @@ using Reddit_Management_System.Service.Services.Roles;
 using Reddit_Management_System.Service.Services.Tests;
 using Reddit_Management_System.Service.Services.Users;
 using Reddit_Management_System.Service.Validators.Users;
+using Reddit_Management_System.Application.ServiceInterfaces.Reddit;
+using Reddit_Management_System.Service.Services.Reddit;
 
 namespace Reddit_Management_System.DependencyExtensions
 {
@@ -25,6 +27,7 @@ namespace Reddit_Management_System.DependencyExtensions
             services.AddValidatorsFromAssemblyContaining<UserRequestValidator>();
             services.AddValidatorsFromAssemblyContaining<LoginRequest>();
             services.AddScoped<IEmailCommandService, EmailCommandService>();
+            services.AddScoped<IRedditQueryService, RedditQueryService>();
         }
     }
 }

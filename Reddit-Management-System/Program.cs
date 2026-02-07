@@ -7,7 +7,6 @@ using Reddit_Management_System.DependencyExtensions;
 using Reddit_Management_System.Mappers;
 using Reddit_Management_System.Middleware;
 using System.IO.Compression;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +45,12 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+#region BackgroundJob Configuration
+
+builder.AddBackgroundJobs();
+
+#endregion
 
 
 #region Redis Cache Configuration

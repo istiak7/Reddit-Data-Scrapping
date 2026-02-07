@@ -80,42 +80,42 @@ namespace Reddit_Management_System.Controllers.Users
 
         #region Otp
 
-        [HttpPost("send-otp")]
-        [AllowAnonymous]
-        public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest model, CancellationToken cancellationToken)
-        {
-            Result result;
-            var validationResult = new EmailValidatorDto().Validate(model);
-            if(!validationResult.IsValid)
-            {
-                result = Utility.GetValidationFailedMsg(FluentValidationHelper.GetErrorMessage(validationResult.Errors));
-            }
-            else
-            {
-                var Command = new SendEmailCommand(model);
-                result = await _mediator.Send(Command, cancellationToken);
-            }
-            return StatusCode(result.StatusCode, result);
-
-        }
-        [HttpPost("verify-otp")]
-        [AllowAnonymous]
-        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequestDto model,CancellationToken cancellationToken)
-        {
-            Result result;
-            var validationResult = new VerifyOtpRequestValidatorDto().Validate(model);
-            if(!validationResult.IsValid)
-            {
-                result = Utility.GetValidationFailedMsg(FluentValidationHelper.GetErrorMessage(validationResult.Errors));
-               
-            }
-            else
-            {
-                var Command = new OtpVerificationCommand(model);
-                result = await _mediator.Send(Command, cancellationToken);
-            }
-            return StatusCode(result.StatusCode, result);
-        }
+        // [HttpPost("send-otp")]
+        // [AllowAnonymous]
+        // public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest model, CancellationToken cancellationToken)
+        // {
+        //     Result result;
+        //     var validationResult = new EmailValidatorDto().Validate(model);
+        //     if(!validationResult.IsValid)
+        //     {
+        //         result = Utility.GetValidationFailedMsg(FluentValidationHelper.GetErrorMessage(validationResult.Errors));
+        //     }
+        //     else
+        //     {
+        //         var Command = new SendEmailCommand(model);
+        //         result = await _mediator.Send(Command, cancellationToken);
+        //     }
+        //     return StatusCode(result.StatusCode, result);
+        //
+        // }
+        // [HttpPost("verify-otp")]
+        // [AllowAnonymous]
+        // public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequestDto model,CancellationToken cancellationToken)
+        // {
+        //     Result result;
+        //     var validationResult = new VerifyOtpRequestValidatorDto().Validate(model);
+        //     if(!validationResult.IsValid)
+        //     {
+        //         result = Utility.GetValidationFailedMsg(FluentValidationHelper.GetErrorMessage(validationResult.Errors));
+        //        
+        //     }
+        //     else
+        //     {
+        //         var Command = new OtpVerificationCommand(model);
+        //         result = await _mediator.Send(Command, cancellationToken);
+        //     }
+        //     return StatusCode(result.StatusCode, result);
+        // }
         #endregion
     }
 }
