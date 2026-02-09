@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Reddit_Management_System.Application.ServiceInterfaces.Reddit;
 
@@ -6,15 +7,21 @@ namespace Reddit_Management_System.Service.Jobs
     public class RedditEmailJob : IJob
     {
         private readonly IRedditQueryService _redditQueryService;
-
-        public RedditEmailJob(IRedditQueryService redditQueryService)
+        private readonly IServiceScopeFactory _scopeFactory;
+        public RedditEmailJob(IServiceScopeFactory scopeFactory)
         {
-            _redditQueryService = redditQueryService;
+            _scopeFactory = scopeFactory;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            await _redditQueryService.FetchTopRedditPosts();
+            Console.WriteLine("=== RedditEmailJob STARTED ===");
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var redditQueryService = scope.ServiceProvider.GetRequiredService<IRedditQueryService>();
+                await redditQueryService.FetchTopRedditPosts();
+            } 
+            Console.WriteLine("=== RedditEmailJob Finished ===");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Reddit_Management_System.Application.Dtos.Requests.Users;
+using Reddit_Management_System.Application.ServiceInterfaces.AI;
 using Reddit_Management_System.Application.ServiceInterfaces.Email;
 using Reddit_Management_System.Application.ServiceInterfaces.Permissions;
 using Reddit_Management_System.Application.ServiceInterfaces.Roles;
@@ -12,6 +13,7 @@ using Reddit_Management_System.Service.Services.Tests;
 using Reddit_Management_System.Service.Services.Users;
 using Reddit_Management_System.Service.Validators.Users;
 using Reddit_Management_System.Application.ServiceInterfaces.Reddit;
+using Reddit_Management_System.Service.Services.AI;
 using Reddit_Management_System.Service.Services.Reddit;
 
 namespace Reddit_Management_System.DependencyExtensions
@@ -28,6 +30,7 @@ namespace Reddit_Management_System.DependencyExtensions
             services.AddValidatorsFromAssemblyContaining<LoginRequest>();
             services.AddScoped<IEmailCommandService, EmailCommandService>();
             services.AddScoped<IRedditQueryService, RedditQueryService>();
+            services.AddScoped<IGeminiComamndService, GeminiCommandService>();
         }
     }
 }

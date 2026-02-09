@@ -34,16 +34,20 @@ namespace Reddit_Management_System.Repo.Repositories.Reddit
 
                     if (createdUtc >= last24Hours)
                     {
+                        var title = data.GetProperty("title").GetString();
+                        var description = data.GetProperty("selftext").GetString();
+                        var upvotes = data.GetProperty("ups").GetInt32();
+                        
                         allPosts.Add(new SrapResponseDto
                         {
-                            Title = data.GetProperty("title").GetString(),
-                            Description = data.GetProperty("selftext").GetString(),
-                            Upvotes = data.GetProperty("ups").GetInt32()
+                            Title = title,
+                            Description = description,
+                            Upvotes = upvotes
                         });
+
                     }
                 }
             }
-
             return allPosts;
         }
     }

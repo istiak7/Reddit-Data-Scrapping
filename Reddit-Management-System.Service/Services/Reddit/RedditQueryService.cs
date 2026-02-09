@@ -1,5 +1,6 @@
 using Reddit_Management_System.Application.Features.Email.Command.Dtos;
 using Reddit_Management_System.Application.RepositoryInterfaces.Reddit;
+using Reddit_Management_System.Application.ServiceInterfaces.AI;
 using Reddit_Management_System.Application.ServiceInterfaces.Email;
 using Reddit_Management_System.Application.ServiceInterfaces.Reddit;
 
@@ -9,9 +10,13 @@ namespace Reddit_Management_System.Service.Services.Reddit
     {
         private readonly IRedditRepository _redditRepository;
         private readonly IEmailCommandService _emailCommandService;
-        public RedditQueryService(IRedditRepository redditRepository, IEmailCommandService emailCommandService)
+        private readonly IGeminiComamndService _geminiComamndService;
+        public RedditQueryService(IRedditRepository redditRepository, 
+                                  IEmailCommandService emailCommandService, 
+                                  IGeminiComamndService geminiComamndService )
         {
             _emailCommandService = emailCommandService;
+            _geminiComamndService = geminiComamndService;
             _redditRepository = redditRepository;
         }
 
@@ -20,16 +25,37 @@ namespace Reddit_Management_System.Service.Services.Reddit
             var allPosts = await _redditRepository.FetchRedditPostsFromApi();
             var topPosts = allPosts.OrderByDescending(p => p.Upvotes).Take(5).ToList();
 
-            List<string> emails = new()
+            var postsForAI = topPosts.Select(p => (p.Title, p.Description, p.Upvotes)).ToList();
+            var aiResponses = await _geminiComamndService.RearrangeBatchPostsAsync(postsForAI);
+
+            List<SrapResponseDto> ScrapResponse = [];
+            if (aiResponses != null)
             {
-                "20101112@uap-bd.edu",
-                //"ab.asma1084@gmail.com"
-            };
-            foreach (var email in emails)
-            {
-                await _emailCommandService.SendOtpEmailAsync(email, topPosts);
+                ScrapResponse = aiResponses.Select(aiResponseDto => new SrapResponseDto
+                {
+                    Title = aiResponseDto.Title,
+                    Description = aiResponseDto.Description,
+                    Upvotes = aiResponseDto.UpVotes
+                }).ToList();
             }
-            return topPosts;
+            else
+            {
+                ScrapResponse = topPosts.Select(p => new SrapResponseDto
+                {
+                    Title = p.Title,
+                    Description = p.Description,
+                    Upvotes = p.Upvotes
+                }).ToList();
+            }
+            if (ScrapResponse.Any())
+            {
+                List<string> emails = new() { "20101112@uap-bd.edu" };
+                foreach (var email in emails)
+                {
+                    await _emailCommandService.SendOtpEmailAsync(email, ScrapResponse);
+                }
+            }
+            return ScrapResponse;
         }
     }
 }
