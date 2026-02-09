@@ -15,6 +15,8 @@ using Reddit_Management_System.Service.Validators.Users;
 using Reddit_Management_System.Application.ServiceInterfaces.Reddit;
 using Reddit_Management_System.Service.Services.AI;
 using Reddit_Management_System.Service.Services.Reddit;
+using Reddit_Management_System.Application.ServiceInterfaces.Subscribers;
+using Reddit_Management_System.Service.Services.Subscribers;
 
 namespace Reddit_Management_System.DependencyExtensions
 {
@@ -31,6 +33,7 @@ namespace Reddit_Management_System.DependencyExtensions
             services.AddScoped<IEmailCommandService, EmailCommandService>();
             services.AddScoped<IRedditQueryService, RedditQueryService>();
             services.AddScoped<IGeminiComamndService, GeminiCommandService>();
+            services.AddScoped<ISubscriberCommandService, SubscriberCommandService>();
         }
     }
 }

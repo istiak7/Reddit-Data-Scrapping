@@ -1,3 +1,4 @@
+using Reddit_Management_System.Application.Dtos.Responses.AI;
 using Reddit_Management_System.Application.Features.Email.Command.Dtos;
 using Reddit_Management_System.Application.RepositoryInterfaces.Reddit;
 using Reddit_Management_System.Application.ServiceInterfaces.AI;
@@ -27,9 +28,8 @@ namespace Reddit_Management_System.Service.Services.Reddit
 
             var postsForAI = topPosts.Select(p => (p.Title, p.Description, p.Upvotes)).ToList();
             var aiResponses = await _geminiComamndService.RearrangeBatchPostsAsync(postsForAI);
-
             List<SrapResponseDto> ScrapResponse = [];
-            if (aiResponses != null)
+            if (aiResponses != null && aiResponses.Count() > 0)
             {
                 ScrapResponse = aiResponses.Select(aiResponseDto => new SrapResponseDto
                 {
@@ -49,7 +49,7 @@ namespace Reddit_Management_System.Service.Services.Reddit
             }
             if (ScrapResponse.Any())
             {
-                List<string> emails = new() { "20101112@uap-bd.edu" };
+                List<string> emails = await _redditRepository.GetSubscribersEmails();
                 foreach (var email in emails)
                 {
                     await _emailCommandService.SendOtpEmailAsync(email, ScrapResponse);

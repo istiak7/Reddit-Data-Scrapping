@@ -7,6 +7,7 @@ using Reddit_Management_System.Domain.Entities.Permissions;
 using Reddit_Management_System.Domain.Entities.Roles;
 using Reddit_Management_System.Domain.Entities.Users;
 using System.Reflection;
+using Reddit_Management_System.Domain.Entities.Subscribers;
 
 namespace Reddit_Management_System.Data.DbContexts
 {
@@ -30,6 +31,7 @@ namespace Reddit_Management_System.Data.DbContexts
         public DbSet<Role> Roles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<Subscriber> Subscribers { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

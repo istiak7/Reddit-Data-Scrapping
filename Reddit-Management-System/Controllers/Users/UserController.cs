@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reddit_Management_System.Application.Common.Utilities;
 using Reddit_Management_System.Application.Dtos.Requests.Users;
-using Reddit_Management_System.Application.Features.Email.Command;
-using Reddit_Management_System.Application.Features.Email.Command.Dtos;
-using Reddit_Management_System.Application.Features.Roles.Commands;
-using Reddit_Management_System.Application.Features.Roles.Commands.Dtos;
-using Reddit_Management_System.Application.ServiceInterfaces.Email;
+using Reddit_Management_System.Application.Features.Subscribers.Commands;
+using Reddit_Management_System.Application.Features.Subscribers.Commands.Dtos;
 using Reddit_Management_System.Application.Services.Users;
 using Reddit_Management_System.Service.Validators;
 
@@ -17,12 +14,12 @@ namespace Reddit_Management_System.Controllers.Users
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController (
+    public class UserController(
             IUserService _userService,
             IMediator _mediator
-        ) : ControllerBase 
+        ) : ControllerBase
     {
-        #region Query
+        #region RefreshToken
 
         [AllowAnonymous]
         [HttpGet("refresh-token")]
@@ -35,10 +32,7 @@ namespace Reddit_Management_System.Controllers.Users
         }
 
         #endregion
-
-
-        #region Command
-
+        
         #region LOGIN
 
         [AllowAnonymous]
@@ -74,48 +68,48 @@ namespace Reddit_Management_System.Controllers.Users
         }
 
         #endregion
-
+        
+        #region Subscribe
+        [AllowAnonymous]
+        [HttpPost("Subscribe")]
+        public async Task<IActionResult> SaveSubscriberEmail([FromForm] SubscriberCreateDto model, CancellationToken cancellationToken)
+        {
+            Result result;
+            var validationResult = new SubscriberCreateDtoValidator().Validate(model);
+            if (!validationResult.IsValid)
+            {
+                result = Utility.GetValidationFailedMsg(FluentValidationHelper.GetErrorMessage(validationResult.Errors));
+            }
+            else
+            {
+                var Command = new SubscriberCreateCommand(model);
+                result = await _mediator.Send(Command, cancellationToken);
+            }
+            return StatusCode(result.StatusCode, result);
+        }
+        
         #endregion
-
-
-        #region Otp
-
-        // [HttpPost("send-otp")]
-        // [AllowAnonymous]
-        // public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest model, CancellationToken cancellationToken)
-        // {
-        //     Result result;
-        //     var validationResult = new EmailValidatorDto().Validate(model);
-        //     if(!validationResult.IsValid)
-        //     {
-        //         result = Utility.GetValidationFailedMsg(FluentValidationHelper.GetErrorMessage(validationResult.Errors));
-        //     }
-        //     else
-        //     {
-        //         var Command = new SendEmailCommand(model);
-        //         result = await _mediator.Send(Command, cancellationToken);
-        //     }
-        //     return StatusCode(result.StatusCode, result);
-        //
-        // }
-        // [HttpPost("verify-otp")]
-        // [AllowAnonymous]
-        // public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequestDto model,CancellationToken cancellationToken)
-        // {
-        //     Result result;
-        //     var validationResult = new VerifyOtpRequestValidatorDto().Validate(model);
-        //     if(!validationResult.IsValid)
-        //     {
-        //         result = Utility.GetValidationFailedMsg(FluentValidationHelper.GetErrorMessage(validationResult.Errors));
-        //        
-        //     }
-        //     else
-        //     {
-        //         var Command = new OtpVerificationCommand(model);
-        //         result = await _mediator.Send(Command, cancellationToken);
-        //     }
-        //     return StatusCode(result.StatusCode, result);
-        // }
+        
+        #region Unsubscribe
+        [AllowAnonymous]
+        [HttpPost("Unsubscribe")]
+        public async Task<IActionResult> Unsubscribe([FromForm] UnsubscriberCreateDto model, CancellationToken cancellationToken)
+        {
+            Result result;
+            var validationResult = new UnsubscriberCreateDtoValidator().Validate(model);
+            if (!validationResult.IsValid)
+            {
+                result = Utility.GetValidationFailedMsg(FluentValidationHelper.GetErrorMessage(validationResult.Errors));
+            }
+            else
+            {
+                var Command = new SubscriberDeleteCommand(model);
+                result = await _mediator.Send(Command, cancellationToken);
+            }
+            return StatusCode(result.StatusCode, result);
+        }
         #endregion
+        
+
     }
 }

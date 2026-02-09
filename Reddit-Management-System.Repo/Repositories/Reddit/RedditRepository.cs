@@ -1,11 +1,17 @@
 using Reddit_Management_System.Application.Features.Email.Command.Dtos;
 using Reddit_Management_System.Application.RepositoryInterfaces.Reddit;
 using System.Text.Json;
+using Reddit_Management_System.Data.DbContexts;
 
 namespace Reddit_Management_System.Repo.Repositories.Reddit
 {
     public class RedditRepository : IRedditRepository
     {
+        private readonly ApplicationDbContextWrite _dbContext;
+        public RedditRepository(ApplicationDbContextWrite dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public async Task<List<SrapResponseDto>> FetchRedditPostsFromApi()
         {
             using var client = new HttpClient();
@@ -49,6 +55,13 @@ namespace Reddit_Management_System.Repo.Repositories.Reddit
                 }
             }
             return allPosts;
+        }
+
+        public async Task<List<string>> GetSubscribersEmails()
+        {
+            var subscriber =  _dbContext.Subscribers.Where(x => x.IsActive == 1).Select(x => x.Email).ToList();
+            return subscriber;
+            
         }
     }
 }

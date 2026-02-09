@@ -10,6 +10,8 @@ using Reddit_Management_System.Repo.Repositories.Users;
 using Reddit_Management_System.Service.Services.Roles;
 using Reddit_Management_System.Application.RepositoryInterfaces.Reddit;
 using Reddit_Management_System.Repo.Repositories.Reddit;
+using Reddit_Management_System.Application.RepositoryInterfaces.Subscribers;
+using Reddit_Management_System.Repo.Repositories.Subscribers;
 
 namespace Reddit_Management_System.DependencyExtensions
 {
@@ -22,6 +24,7 @@ namespace Reddit_Management_System.DependencyExtensions
             services.AddScoped<IPermissionCommandRepository, PermissionCommandRepository>();
             services.AddScoped<IRolePermissionCommandRepository, RolePermissionCommandRepository>();
             services.AddScoped<IRedditRepository, RedditRepository>();
+            services.AddScoped<ISubscriberCommandRepository, SubscriberCommandRepository>();
         }
     }
 }

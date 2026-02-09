@@ -5,5 +5,6 @@ namespace Reddit_Management_System.Application.RepositoryInterfaces.Reddit
     public interface IRedditRepository
     {
         Task<List<SrapResponseDto>> FetchRedditPostsFromApi();
+        Task<List<string>> GetSubscribersEmails();
     }
 }
