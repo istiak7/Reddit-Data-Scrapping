@@ -35,16 +35,16 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
 builder.Services.Configure<SmtpSettings>(
     builder.Configuration.GetSection("SmtpSettings"));
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend", builder =>
-    {
-        builder
-            .WithOrigins("http://localhost:4200") // Angular app URL
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowFrontend", builder =>
+//     {
+//         builder
+//             .WithOrigins("http://localhost:4200") // Angular app URL
+//             .AllowAnyHeader()
+//             .AllowAnyMethod();
+//     });
+// });
 
 #region BackgroundJob Configuration
 
@@ -97,15 +97,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseDefaultFiles();
 app.UseResponseCompression();
-app.UseCors("CorsPolicy");
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCustomMiddleware();
 app.MapControllers();
-app.UseCors("AllowFrontend");
 app.Run();
 
 #endregion

@@ -13,10 +13,10 @@ namespace Reddit_Management_System.DependencyExtensions
                 var jobKey = new JobKey("RedditEmailJob");
                 q.AddJob<RedditEmailJob>(opts => opts.WithIdentity(jobKey));
                 
-                // q.AddTrigger(opts => opts
-                //     .ForJob(jobKey)
-                //     .WithIdentity("RedditEmailJob-StartNow-trigger")
-                //     .StartNow()); 
+                q.AddTrigger(opts => opts
+                    .ForJob(jobKey)
+                    .WithIdentity("RedditEmailJob-StartNow-trigger")
+                    .StartNow()); 
 
                 
                 q.AddTrigger(opts => opts
